@@ -19,10 +19,13 @@ def pregunta_01():
 
     Rta/
     214
-
     """
-    return
-
+    suma = 0
+    with open('./data.csv', 'r') as file:
+        colums = file.readlines()
+        colums = [line.strip().split('\t') for line in colums]
+        suma = sum([int(column[1]) for column in colums])
+    return suma
 
 def pregunta_02():
     """
@@ -39,8 +42,17 @@ def pregunta_02():
     ]
 
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            if columns[0] in result:
+                result[columns[0]] += 1
+            else:
+                result[columns[0]] = 1
+        result = [(k, v) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 def pregunta_03():
     """
@@ -57,7 +69,17 @@ def pregunta_03():
     ]
 
     """
-    return
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            if columns[0] in result:
+                result[columns[0]] += int(columns[1])
+            else:
+                result[columns[0]] = int(columns[1])
+        result = [(k, v) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 
 def pregunta_04():
@@ -82,8 +104,17 @@ def pregunta_04():
     ]
 
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            if columns[2].split('-')[1] in result:
+                result[columns[2].split('-')[1]] += 1
+            else:
+                result[columns[2].split('-')[1]] = 1
+        result = [(k, v) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 def pregunta_05():
     """
@@ -100,8 +131,20 @@ def pregunta_05():
     ]
 
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            if columns[0] in result:
+                if int(columns[1]) > result[columns[0]][0]:
+                    result[columns[0]][0] = int(columns[1])
+                if int(columns[1]) < result[columns[0]][1]:
+                    result[columns[0]][1] = int(columns[1])
+            else:
+                result[columns[0]] = [int(columns[1]), int(columns[1])]
+        result = [(k, v[0], v[1]) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 def pregunta_06():
     """
@@ -123,10 +166,24 @@ def pregunta_06():
         ("iii", 0, 9),
         ("jjj", 5, 17),
     ]
-
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            for clave_valor in columns[4].split(','):
+                clave, valor = clave_valor.split(':')
+                valor = int(valor)
+                if clave in result:
+                    if valor > result[clave][1]:
+                        result[clave][1] = valor
+                    if valor < result[clave][0]:
+                        result[clave][0] = valor
+                else:
+                    result[clave] = [valor, valor]
+        result = [(k, v[0], v[1]) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 def pregunta_07():
     """
@@ -147,10 +204,19 @@ def pregunta_07():
         (8, ["E", "D", "E", "A", "B"]),
         (9, ["A", "B", "E", "A", "A", "C"]),
     ]
-
     """
-    return
-
+    result = {} 
+    with open('./data.csv', 'r') as file:
+        colums = file.readlines()
+        colums = [line.strip().split('\t') for line in colums]
+        for column in colums:
+            if column[1] in result:
+                result[column[1]].append(column[0])
+            else:
+                result[column[1]] = [column[0]]
+        result = [(k, v) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 def pregunta_08():
     """
@@ -172,10 +238,20 @@ def pregunta_08():
         (8, ["A", "B", "D", "E"]),
         (9, ["A", "B", "C", "E"]),
     ]
-
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        colums = file.readlines()
+        colums = [line.strip().split('\t') for line in colums]
+        for column in colums:
+            if column[1] in result:
+                if column[0] not in result[column[1]]:
+                    result[column[1]].append(column[0])
+            else:
+                result[column[1]] = [column[0]]
+        result = [(k, sorted(v)) for k, v in result.items()]
+        result = list(sorted(result, key=lambda x: x[0]))
+    return result
 
 def pregunta_09():
     """
@@ -197,8 +273,18 @@ def pregunta_09():
     }
 
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            for clave_valor in columns[4].split(','):
+                clave, _ = clave_valor.split(':')
+                if clave in result:
+                    result[clave] += 1
+                else:
+                    result[clave] = 1
+            result = dict(sorted(result.items()))
+    return result
 
 def pregunta_10():
     """
@@ -218,8 +304,12 @@ def pregunta_10():
 
 
     """
-    return
-
+    result = []
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            result.append((columns[0], len(columns[3].replace(',', '')), len(columns[4].split(','))))
+    return result
 
 def pregunta_11():
     """
@@ -239,8 +329,17 @@ def pregunta_11():
 
 
     """
-    return
-
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            for letra in columns[3].replace(',', ''):
+                if letra in result:
+                    result[letra] += int(columns[1])
+                else:
+                    result[letra] = int(columns[1])
+        result = dict(sorted(result.items()))
+    return result
 
 def pregunta_12():
     """
@@ -257,4 +356,15 @@ def pregunta_12():
     }
 
     """
-    return
+    result = {}
+    with open('./data.csv', 'r') as file:
+        for fila in file:
+            columns = fila.strip().split('\t')
+            for clave_valor in columns[4].split(','):
+                _, valor = clave_valor.split(':')
+                if columns[0] in result:
+                    result[columns[0]] += int(valor)
+                else:
+                    result[columns[0]] = int(valor)
+        result = dict(sorted(result.items()))
+    return result
