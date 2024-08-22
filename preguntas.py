@@ -253,6 +253,7 @@ def pregunta_08():
         result = list(sorted(result, key=lambda x: x[0]))
     return result
 
+
 def pregunta_09():
     """
     Retorne un diccionario que contenga la cantidad de registros en que aparece cada
