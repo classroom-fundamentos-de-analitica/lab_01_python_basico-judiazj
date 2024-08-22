@@ -205,17 +205,19 @@ def pregunta_07():
         (9, ["A", "B", "E", "A", "A", "C"]),
     ]
     """
-    result = {} 
+    result = {}
     with open('./data.csv', 'r') as file:
-        colums = file.readlines()
-        colums = [line.strip().split('\t') for line in colums]
-        for column in colums:
-            if column[1] in result:
-                result[column[1]].append(column[0])
-            else:
-                result[column[1]] = [column[0]]
-        result = [(k, v) for k, v in result.items()]
-        result = list(sorted(result, key=lambda x: x[0]))
+        lines = file.readlines()
+        for line in lines:
+            elements = line.strip().split('\t')
+            key = int(elements[1])   
+            value = elements[0]  
+
+            if key not in result:
+                result[key] = []
+            result[key].append(value)
+        
+        result = sorted(result.items())    
     return result
 
 def pregunta_08():
@@ -241,17 +243,21 @@ def pregunta_08():
     """
     result = {}
     with open('./data.csv', 'r') as file:
-        colums = file.readlines()
-        colums = [line.strip().split('\t') for line in colums]
-        for column in colums:
-            if column[1] in result:
-                if column[0] not in result[column[1]]:
-                    result[column[1]].append(column[0])
+        rows = file.readlines()
+        rows = [line.strip().split('\t') for line in rows]
+        
+        for row in rows:
+            key = int(row[1])
+            letter = row[0]
+            if key in result:
+                if letter not in result[key]:
+                    result[key].append(letter)
             else:
-                result[column[1]] = [column[0]]
-        result = [(k, sorted(v)) for k, v in result.items()]
-        result = list(sorted(result, key=lambda x: x[0]))
+                result[key] = [letter]
+        
+        result = [(key, sorted(set(letters))) for key, letters in sorted(result.items())]    
     return result
+
 
 def pregunta_09():
     """
